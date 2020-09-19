@@ -22,7 +22,17 @@ services:
       - /srv/app/var/sessions/
     environment:
       - SYMFONY_VERSION
-
+  database:
+        image: 'mysql:latest'
+        environment:
+            MYSQL_ROOT_PASSWORD: admin
+        ports:
+            # To allow the host machine to access the ports below, modify the lines below.
+            # For example, to allow the host to connect to port 3306 on the container, you would change
+            # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
+            # See https://docs.docker.com/compose/compose-file/#ports for more information.
+            - '3306'
+            
   nginx:
     build:
       context: .
@@ -35,7 +45,7 @@ services:
       - ./public:/srv/app/public:ro
     ports:
       - "80:80"
-
+  
   # This HTTP/2 proxy is not secure: it should only be used in dev
   h2-proxy:
     build:
