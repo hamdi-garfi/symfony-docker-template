@@ -10,6 +10,10 @@ ARG NGINX_VERSION=1.17
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 
+RUN apk --no-cache update \
+    && apk --no-cache upgrade \
+    && apk add --no-cache php7-mysqli
+
 # persistent / runtime deps
 RUN apk add --no-cache \
         acl \
@@ -85,7 +89,7 @@ ENV STABILITY ${STABILITY:-stable}
 ARG SYMFONY_VERSION="^4.4"
 
 # Download the Symfony skeleton and leverage Docker cache layers
-RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
+RUN composer create-project "symfony/skeleton:${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
 	composer clear-cache
 
 ###> recipes ###
