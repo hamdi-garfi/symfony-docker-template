@@ -50,7 +50,7 @@ services:
       - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./public:/srv/app/public:ro
     ports:
-      - "80:80"
+      - "8000:80"
   
   # This HTTP/2 proxy is not secure: it should only be used in dev
   h2-proxy:

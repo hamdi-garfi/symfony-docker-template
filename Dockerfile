@@ -123,7 +123,7 @@ COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /srv/app
 
-COPY --from=symfony_php /srv/app/public public/
+COPY . /srv/app
 
 # "h2-proxy-cert" stage
 FROM alpine:latest AS symfony_h2-proxy-cert
