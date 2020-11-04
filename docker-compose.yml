@@ -7,6 +7,8 @@ services:
       args:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
+    depends_on:
+      - db
     healthcheck:
       interval: 10s
       timeout: 3s
@@ -20,22 +22,24 @@ services:
       - /srv/app/var/cache/
       - /srv/app/var/logs/
       - /srv/app/var/sessions/
-    environment:
-      - SYMFONY_VERSION
+    environment:       
+      DB_HOST: db
+    
       
-  mysql:
+  db:
     image: "mysql:5.7"
-    container_name: mysql
+    container_name: db
     restart: always
     volumes:
-      - ./mysql:/var/lib/mysql
+      - "./initdb.sql:/docker-entrypoint-initdb.d/1.sql"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_DATABASE=root
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3306:3306" 
     expose:
       - 3306
             
@@ -63,3 +67,8 @@ services:
       - ./docker/h2-proxy/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "443:443"
+
+networks:
+    php:
+    db:
+    h2-proxy:

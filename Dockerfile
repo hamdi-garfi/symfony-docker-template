@@ -14,6 +14,11 @@ RUN apk --no-cache update \
     && apk --no-cache upgrade \
     && apk add --no-cache php7-mysqli
 
+RUN \
+    docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
+    && docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
+    && docker-php-ext-install pdo_mysql
+
 # persistent / runtime deps
 RUN apk add --no-cache \
         acl \
@@ -89,8 +94,10 @@ ENV STABILITY ${STABILITY:-stable}
 ARG SYMFONY_VERSION="^4.4"
 
 # Download the Symfony skeleton and leverage Docker cache layers
-RUN composer create-project "symfony/skeleton:${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
+RUN composer create-project symfony/website-skeleton:${SYMFONY_VERSION} . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
 	composer clear-cache
+
+ 
 
 ###> recipes ###
 ###< recipes ###
