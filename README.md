@@ -23,7 +23,7 @@ The value must be [a valid Composer stability option](https://getcomposer.org/do
 For instance, use the following command to use the `master` branch of Symfony:
 
 ```bash
-STABILITY=dev docker-compose up --build
+docker-compose up --build
 ```
 
 ## Debugging
@@ -48,55 +48,4 @@ RUN set -eux; \
 	apk del .build-deps
 ```
 
-### Configure Xdebug with Docker Compose Override
-
-Using an [override](https://docs.docker.com/compose/reference/overview/#specifying-multiple-compose-files) file named `docker-compose.override.yaml` ensures that the production
-configuration remains untouched.
-
-As example, an override could look like this:
-
-```yaml
-version: "3.4"
-
-services:
-  php:
-    build:
-      context: .
-      target: symfony_php_dev
-    environment:
-      # See https://docs.docker.com/docker-for-mac/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host
-      # See https://github.com/docker/for-linux/issues/264
-      # The `remote_host` below may optionally be replaced with `remote_connect_back`
-      XDEBUG_CONFIG: >-
-        remote_enable=1
-        remote_host=host.docker.internal
-        remote_port=9001
-        idekey=PHPSTORM
-      # This should correspond to the server declared in PHPStorm `Preferences | Languages & Frameworks | PHP | Servers`
-      # Then PHPStorm will use the corresponding path mappings
-      PHP_IDE_CONFIG: serverName=symfony
-```
-
-Then run:
-
-```bash
-docker-compose up -d
-```
-
-If `docker-compose.yml` and a `docker-compose.override.yml` are present on the same directory level, Docker Compose combines the two files into a single configuration, applying the configuration in the `docker-compose.override.yml` file over and in addition to the values in the `docker-compose.yml` file.
-
-### Troubleshooting
-
-Inspect the installation with the following command. The requested Xdebug version should be displayed in the output.
-
-```bash
-$ docker-compose exec php php --version
-
-PHP ...
-    with Xdebug v2.8.0 ...
-```
-
-### Editing Permissions on Linux
-
-If you work on linux and cannot edit some of the project files right after the first installation, you can run `docker-compose run --rm php chown -R $(id -u):$(id -g) .` to set yourself as owner of the project files that were created by the docker container.
 
