@@ -1,4 +1,4 @@
-# Symfony Docker
+# Docker Template
 
 
 Is a based [Docker](https://www.docker.com/) project to create [Symfony](https://symfony.com) application with docker. this project include a full [HTTP/2](https://symfony.com/doc/current/weblink.html) and HTTPS support..
