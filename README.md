@@ -6,8 +6,7 @@ Is a based [Docker](https://www.docker.com/) project to create [Symfony](https:/
 ## Getting Started
 
 1. Run `docker-compose up` (the logs will be displayed in the current shell)
-2. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-3. **Enjoy!**
+2. Open `https://localhost` in your favorite web browser 
 
 ## Selecting a Specific Symfony Version
 
