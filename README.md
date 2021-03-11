@@ -37,7 +37,7 @@ it's recommended to add a custom stage to the end of the `Dockerfile`.
 
 ```Dockerfile
 # Dockerfile
-FROM symfony_php as symfony_php_dev
+FROM sf_app as sf_app_dev
 
 ARG XDEBUG_VERSION=2.8.0
 RUN set -eux; \
